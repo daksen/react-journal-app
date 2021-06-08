@@ -1,29 +1,43 @@
 import React from 'react';
+import moment from 'moment';
+import { useDispatch } from 'react-redux';
+import { activeNote } from '../../actions/notes';
+import placeholder from '../../assets/placeholder_600x400.svg';
 
-export const JournalEntry = () => {
+export const JournalEntry = ({id, title, body, date, url}) => {
+  const dispatch = useDispatch();
+  const noteDate = moment(date);
+  const handleNoteClick = () => {
+    dispatch(activeNote(id, {title, body, date, url}));
+  }
+  if(!url) {
+    url = placeholder
+  }
+  
   return (
-    <div className="journal__entry">
-      <div 
+    <div
+      className="journal__entry" 
+      onClick={ handleNoteClick }
+    > 
+      <div
         className="journal__entry-picture"
         style={{
           backgroundSize: 'cover',
-          backgroundImage: 'url(https://analyticsindiamag.com/wp-content/uploads/2020/10/7d744a684fe03ebc7e8de545f97739dd.jpg)'
+          backgroundImage: `url(${url})`
         }}
       />
-
       <div className="journal__entry-body">
         <p className="journal__entry-title">
-          Un nuevo día
+          { title }
         </p>
         <p className="journal__entry-content">
-          Ea magna elit est mollit eu veniam ipsum proident laborum. Fugiat anim aliqua duis reprehenderit qui. Voluptate eu aliquip ut ea officia reprehenderit eu dolore magna ipsum amet ut. Enim sunt ullamco voluptate labore consequat. Aliquip Lorem duis velit officia. Reprehenderit sint tempor ut sint aliqua laboris pariatur et. Fugiat duis aliquip consectetur quis consequat velit tempor tempor cupidatat in eiusmod.
+          { body }
         </p>
       </div>
-
       <div className="journal__entry-date-box">
-        <span>Monday</span>
-        <h4>28</h4>
+        <span>{ noteDate.format('dddd') }</span>
+        <h4>{ noteDate.format('Do') }</h4>
       </div>
     </div>
-  )
+  );
 }

@@ -7,8 +7,7 @@ import { AuthRouter } from './AuthRouter';
 import { JournalScreen } from '../components/journal/JournalScreen';
 import { firebase } from '../firebase/firebaseConfig';
 import { login } from '../actions/auth';
-import { loadNotes } from '../helpers/loadNotes';
-import { setNotes } from '../actions/notes';
+import { startSetNotes } from '../actions/notes';
 
 export const AppRouter = () => {
 
@@ -22,8 +21,7 @@ export const AppRouter = () => {
       if(user?.uid) {
         dispatch(login(user.uid, user.displayName));
         setIsLoggedIn(true);
-        const notes = await loadNotes(user.uid);
-        dispatch(setNotes(notes));
+        dispatch(startSetNotes(user.uid));
       } else {
         setIsLoggedIn(false);
       }

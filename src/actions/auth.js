@@ -1,6 +1,7 @@
 import Swal from 'sweetalert2';
 import { firebase, googleAuthProvider } from "../firebase/firebaseConfig";
 import { finishLoading, startLoading } from "./ui";
+import { notesLogout } from './notes';
 import { types } from "../types/types";
 
 
@@ -44,9 +45,18 @@ export const loginWithGoogle = () => {
   }
 }
 
+export const login = (uid, displayName) => ({
+  type: types.login,
+  payload: {
+    uid: uid,
+    displayName: displayName
+  }
+});
+
 export const startLogout = () => {
   return(dispatch) => {
     firebase.auth().signOut().then(() => {
+      dispatch(notesLogout());
       dispatch(logout());
     }).catch((error) => {
       Swal.fire('Error', error.message, 'error');
@@ -57,12 +67,3 @@ export const startLogout = () => {
 export const logout = () => ({
   type: types.logout
 });
-
-export const login = (uid, displayName) => ({
-  type: types.login,
-  payload: {
-    uid: uid,
-    displayName: displayName
-  }
-});
-
